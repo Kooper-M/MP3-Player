@@ -4,6 +4,17 @@
 #include <QMainWindow>
 #include <QApplication>
 #include "audioHandler.h"
+#include <QPushButton>
+#include <QWidget> 
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QSlider>
+#include <QDir>
+#include <QSpinBox>
+#include <QMediaPlayer>
+#include <QAudioOutput>
+#include <QUrl>
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 namespace UI {

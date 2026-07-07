@@ -11,3 +11,5 @@ build/
 CMakeCache.txt
 CMakeFiles/
 compile_commands.json
+test.cpp
+audio files/
