@@ -1,0 +1,13 @@
+build/
+.vscode/
+*.exe
+*.dll
+*.o
+*.obj
+*.a
+*.lib
+*.pdb
+*.user
+CMakeCache.txt
+CMakeFiles/
+compile_commands.json
