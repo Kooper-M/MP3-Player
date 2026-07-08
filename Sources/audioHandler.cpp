@@ -1,11 +1,6 @@
 #include "audioHandler.h"
-#include <iostream>
-#include <QDebug>
-#include <QFileInfo>
-#include <QFileInfoList>
-#include <stdexcept>
 
-AudioHandler::AudioHandler(QString path) : playListPos_(0) {
+AudioHandler::AudioHandler(const QString& path, QObject *parent) : dir_(path), QObject(parent), playListPos_(0) {
     dir_ = QDir(path);
     if (!dir_.exists()) {
         qWarning() << "Path does not exist" << path;
@@ -14,7 +9,7 @@ AudioHandler::AudioHandler(QString path) : playListPos_(0) {
     QFileInfoList list = dir_.entryInfoList(QDir::Filter::NoDotAndDotDot | QDir::Filter::AllEntries);
     for (auto file : list) {
         filePathList_ << file.absoluteFilePath();
-        std::cout << file.absoluteFilePath().toStdString() << std::endl;
+        //std::cout << file.absoluteFilePath().toStdString() << std::endl;
     }
 
     player_ = new QMediaPlayer;
@@ -44,6 +39,18 @@ void AudioHandler::updateUrl(QUrl audioFilePath) {
 */
 void AudioHandler::next() {
     playListPos_ = (1 + playListPos_) % (filePathList_.size());
+    player_->setSource(filePathList_.at(playListPos_));
+    player_->play();
+}
+
+void AudioHandler::prev() {
+    std::cout << playListPos_ << std::endl;
+    if (playListPos_ == 0) {
+        playListPos_ = filePathList_.size() - 1;
+    } else {
+        --playListPos_;
+    }
+    std::cout << playListPos_ << std::endl;
     player_->setSource(filePathList_.at(playListPos_));
     player_->play();
 }

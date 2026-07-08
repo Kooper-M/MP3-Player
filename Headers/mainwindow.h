@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include <QApplication>
@@ -15,6 +14,8 @@
 #include <QAudioOutput>
 #include <QUrl>
 #include <QString>
+#include <QSlider>
+#include <QSpinBox>
 
 QT_BEGIN_NAMESPACE
 namespace UI {
@@ -32,4 +33,3 @@ class MainWindow : public QMainWindow {
         UI::MainWIndow *ui;
         AudioHandler audio_;
 };
-#endif 

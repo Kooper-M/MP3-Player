@@ -1,0 +1,9 @@
+-need to link that slider bar to how long is left in the song, I want to add the duration and time. This will be difficult.
+-need to add playlist feature
+-need to add volume bar
+-auto play the next song in the playlist
+-need to add file viewer and ability to click on the song you want to play in the playlist
+-ability to show the current song playing and display the picture
+-ability to loop songs
+-shuffle button
+-need to make UI pretty 
