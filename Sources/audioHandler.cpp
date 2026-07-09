@@ -1,19 +1,18 @@
 #include "audioHandler.h"
 
-AudioHandler::AudioHandler(const QString& path, QObject *parent) : dir_(path), QObject(parent), playListPos_(0) {
-    dir_ = QDir(path);
+AudioHandler::AudioHandler(const QString& path, QObject *parent) : dir_(QDir(path)), QObject(parent), playListPos_(0) {
     if (!dir_.exists()) {
         qWarning() << "Path does not exist" << path;
         return;
     }
-    QFileInfoList list = dir_.entryInfoList(QDir::Filter::NoDotAndDotDot | QDir::Filter::AllEntries);
-    for (auto file : list) {
+    fileInfoList_ = dir_.entryInfoList(QDir::Filter::NoDotAndDotDot | QDir::Filter::AllEntries);
+    for (const auto& file : fileInfoList_) {
         filePathList_ << file.absoluteFilePath();
         //std::cout << file.absoluteFilePath().toStdString() << std::endl;
     }
 
-    player_ = new QMediaPlayer;
-    audioOutput_ = new QAudioOutput;
+    player_ = new QMediaPlayer(this);
+    audioOutput_ = new QAudioOutput(this);
     //ai written debug statement 
     QObject::connect(player_, &QMediaPlayer::errorOccurred, [](QMediaPlayer::Error error, const QString &errorString) {
     std::cout << "player error: " << error << " " << errorString.toStdString() << std::endl;
@@ -30,6 +29,10 @@ void AudioHandler::play() {
 
 void AudioHandler::pause() {
     player_->pause();
+}
+
+void AudioHandler::setVolume(int volume) {
+    audioOutput_->setVolume(volume/100.0);
 }
 /*
 void AudioHandler::updateUrl(QUrl audioFilePath) {
@@ -53,4 +56,10 @@ void AudioHandler::prev() {
     std::cout << playListPos_ << std::endl;
     player_->setSource(filePathList_.at(playListPos_));
     player_->play();
+}
+
+QString AudioHandler::getSongTitle() const{
+    QFileInfo currentSongFile = fileInfoList_.at(playListPos_);
+    //std::cout << currentSongFile.fileName().toStdString() << std::endl;
+    return currentSongFile.baseName();
 }

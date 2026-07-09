@@ -21,6 +21,7 @@ class AudioHandler : public QObject {
         QMediaPlayer *player_;
         QAudioOutput *audioOutput_;
         QDir dir_; 
+        QFileInfoList fileInfoList_;
         QStringList filePathList_;
         int playListPos_;
         size_t playListSize_;
@@ -32,5 +33,7 @@ class AudioHandler : public QObject {
         void pause();
         void next();
         void prev();
+        void setVolume(int);
+        QString getSongTitle() const;
 };
 
