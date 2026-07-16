@@ -10,9 +10,13 @@ qt_add_executable(MP3_Player
     Sources/main.cpp
     Sources/mainwindow.cpp
     Sources/audioHandler.cpp
+    Sources/playlist.cpp
+    
     Headers/mainwindow.h
+    Headers/song.h
     Headers/mainwindow.ui
     Headers/audioHandler.h
+    Headers/playlist.h
 )
 
 target_include_directories(MP3_Player PRIVATE

@@ -12,28 +12,22 @@
 #include <QFileInfoList>
 #include <stdexcept>
 #include <cmath>
+#include "song.h"
 
 class AudioHandler : public QObject {
     Q_OBJECT
     public: 
-        explicit AudioHandler(const QString& filePath, QObject *parent = nullptr);
+        explicit AudioHandler(QObject *parent = nullptr);
+        void setSource(Song);
     private:
         QMediaPlayer *player_;
         QAudioOutput *audioOutput_;
-        QDir dir_; 
-        QFileInfoList fileInfoList_;
-        QStringList filePathList_;
-        int playListPos_;
-        size_t playListSize_;
     signals:
         void close();
     public slots:
         //void updateUrl(QUrl);
         void play();
         void pause();
-        void next();
-        void prev();
         void setVolume(int);
-        QString getSongTitle() const;
 };
 

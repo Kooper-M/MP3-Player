@@ -16,6 +16,7 @@
 #include <QString>
 #include <QSlider>
 #include <QSpinBox>
+#include "playlist.h"
 
 QT_BEGIN_NAMESPACE
 namespace UI {
@@ -29,7 +30,13 @@ class MainWindow : public QMainWindow {
     public:
         MainWindow(QWidget *parent = nullptr);
         ~MainWindow();
+    private slots:
+        void handleNextSong();
+        void handlePrevSong();
+
     private: 
         UI::MainWIndow *ui;
         AudioHandler audio_;
+        Playlist playlist_;
+        QLabel *currSongTitle_;
 };
