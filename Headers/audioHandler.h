@@ -19,15 +19,21 @@ class AudioHandler : public QObject {
     public: 
         explicit AudioHandler(QObject *parent = nullptr);
         void setSource(Song);
+        QMediaPlayer* getPlayer();
+        bool isLooping();
+    
     private:
         QMediaPlayer *player_;
         QAudioOutput *audioOutput_;
+        bool looping = false;
     signals:
         void close();
     public slots:
         //void updateUrl(QUrl);
         void play();
+        void loop();
         void pause();
         void setVolume(int);
+        int getDur();
 };
 

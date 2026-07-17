@@ -16,6 +16,7 @@
 #include <QString>
 #include <QSlider>
 #include <QSpinBox>
+#include <QProgressBar>
 #include "playlist.h"
 
 QT_BEGIN_NAMESPACE
@@ -33,10 +34,12 @@ class MainWindow : public QMainWindow {
     private slots:
         void handleNextSong();
         void handlePrevSong();
+        void updateSongProgress(int pos);
 
     private: 
         UI::MainWIndow *ui;
         AudioHandler audio_;
         Playlist playlist_;
         QLabel *currSongTitle_;
+        QSlider *songProgress;
 };

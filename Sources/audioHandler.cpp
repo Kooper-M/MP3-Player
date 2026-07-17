@@ -10,7 +10,7 @@ AudioHandler::AudioHandler(QObject *parent) : QObject(parent) {
     });
 
     player_->setAudioOutput(audioOutput_);
-    audioOutput_->setVolume(1.0);
+    audioOutput_->setVolume(.1);
 }
 
 void AudioHandler::play() {
@@ -19,6 +19,23 @@ void AudioHandler::play() {
 
 void AudioHandler::pause() {
     player_->pause();
+}
+
+int AudioHandler::getDur() {
+    return player_->duration();
+}
+
+void AudioHandler::loop() {
+    player_->Infinite;
+    looping = !looping;
+}
+
+bool AudioHandler::isLooping() {
+    return looping; 
+}
+
+QMediaPlayer* AudioHandler::getPlayer() {
+    return player_;
 }
 
 void AudioHandler::setVolume(int volume) {

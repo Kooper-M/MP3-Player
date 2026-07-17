@@ -23,16 +23,19 @@ class Playlist : public QObject {
     public:
         explicit Playlist(std::filesystem::path dir);
         Song getSong() const;
+        bool isAutoNext();
 
     public slots:
         Song next();
         Song prev();
+        void flipAutoNext();
 
     private:
         std::filesystem::path dir_; 
         int playListPos_ = 0;
         size_t playListSize_;
         std::vector<Song> playlist_;
+        bool autoNext;
 
 
 };

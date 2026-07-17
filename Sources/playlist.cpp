@@ -36,4 +36,12 @@ Song Playlist::getSong() const{
     return playlist_[playListPos_];
 }
 
+void Playlist::flipAutoNext() {
+    autoNext = !autoNext;
+}
+
+bool Playlist::isAutoNext() {
+    return autoNext;
+}
+
 

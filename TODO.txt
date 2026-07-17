@@ -1,10 +1,7 @@
--make a song struct and playlist class. The audioHandler should probably only handle the playing and pausing.
--need to link that slider bar to how long is left in the song, I want to add the duration and time. This will be difficult.
+-signal if we are looping or  autoplaying
 -need to add playlist feature
--auto play the next song in the playlist
 -need to add file viewer and ability to click on the song you want to play in the playlist
--ability to show the current song playing and display the picture
--ability to loop songs
+-display the picture associated with current song
 -make play and pause button one button;
--shuffle button
+-shuffle button 
 -need to make UI pretty 
