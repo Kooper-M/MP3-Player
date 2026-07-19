@@ -17,6 +17,8 @@
 #include <QSlider>
 #include <QSpinBox>
 #include <QProgressBar>
+#include <QTextStream>
+#include <QScrollArea>
 #include "playlist.h"
 
 QT_BEGIN_NAMESPACE

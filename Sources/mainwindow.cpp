@@ -1,10 +1,10 @@
 #include "mainwindow.h"
-#include <QTextStream>
+
 
 void MainWindow::handleNextSong() {
-    Song newSong = playlist_.next();
-    currSongTitle_->setText(QString::fromStdString(newSong.name));
-    audio_.setSource(newSong);
+    const Song* newSong = playlist_.next();
+    currSongTitle_->setText(QString::fromStdString(newSong->name));
+    audio_.setSource(newSong->file_path_as_string);
     audio_.play();
 }
 
@@ -15,25 +15,26 @@ void MainWindow::updateSongProgress(int pos) {
 }
 
 void MainWindow::handlePrevSong() {
-    Song newSong = playlist_.prev();
-    currSongTitle_->setText(QString::fromStdString(newSong.name));
-    audio_.setSource(newSong);
+    const Song* newSong = playlist_.prev();
+
+    currSongTitle_->setText(QString::fromStdString(newSong->file_path_as_string));
+    audio_.setSource(newSong->file_path_as_string);
     audio_.play();
 }
 
 MainWindow::MainWindow(QWidget *parent) 
 : QMainWindow(parent), audio_(this), playlist_("C:/Users/koopa/personal projects/MP3_Player/audio files") {
-    QWidget *centralWidget = new QWidget(this);
+    QWidget* centralWidget = new QWidget(this);
 
-    QPushButton *playButton = new QPushButton("Play me", centralWidget);
+    QPushButton *playButton = new QPushButton("Play/Pause", centralWidget);
     QPushButton *loopButton = new QPushButton("Loop me", centralWidget);
     QPushButton *autoButton = new QPushButton("Auto Next", centralWidget);
-    QPushButton *pauseButton = new QPushButton("Pause me", centralWidget);
+    //QPushButton *pauseButton = new QPushButton("Pause me", centralWidget);
     QPushButton *quitButton = new QPushButton("Quit me", centralWidget);
     QPushButton *nextButton = new QPushButton("Next", centralWidget);
     QPushButton *prevButton = new QPushButton("Previous", centralWidget);
 
-    currSongTitle_ = new QLabel(QString::fromStdString(playlist_.getSong().name), centralWidget);
+    currSongTitle_ = new QLabel(QString::fromStdString(playlist_.getSong()->name), centralWidget);
     currSongTitle_->setAlignment(Qt::AlignCenter);
 
     QSlider *volumeSlider = new QSlider(Qt::Vertical, centralWidget);
@@ -44,14 +45,43 @@ MainWindow::MainWindow(QWidget *parent)
     songProgress->setRange(0, audio_.getDur());
     songProgress->setValue(0);
 
-    audio_.setSource(playlist_.getSong());
+    audio_.setSource(playlist_.getSong()->file_path_as_string);
 
     
-    QObject::connect(playButton, &QPushButton::clicked, &audio_, &AudioHandler::play);
-    QObject::connect(pauseButton, &QPushButton::clicked, &audio_,&AudioHandler::pause);
+    QObject::connect(playButton, &QPushButton::clicked, this, [this]() {
+        if (audio_.isPlaying()) {
+            audio_.pause();
+        } else {
+            audio_.play();
+        }
+    });
+    //QObject::connect(pauseButton, &QPushButton::clicked, &audio_,&AudioHandler::pause);
     QObject::connect(quitButton, &QPushButton::clicked, this, &MainWindow::close);
-    QObject::connect(loopButton, &QPushButton::clicked, &audio_, &AudioHandler::loop);
-    QObject::connect(autoButton, &QPushButton::clicked, &playlist_, &Playlist::flipAutoNext);
+    QObject::connect(loopButton, &QPushButton::clicked, this, [this, loopButton]() {
+        audio_.loop();
+        if (audio_.isLooping()) {
+            loopButton->setStyleSheet(
+                "QPushButton { background-color : #0078D7 }"
+            );
+        } else {
+            loopButton->setStyleSheet(
+                ""
+            );
+        }
+    });
+    QObject::connect(autoButton, &QPushButton::clicked, this, [this, autoButton]() {
+        playlist_.autoNext();
+        std::cout << playlist_.isAutoNext() << std::endl;
+        if (playlist_.isAutoNext()) {
+            autoButton->setStyleSheet(
+                "QPushButton { background-color : #0078D7 }"
+            );
+        } else {
+            autoButton->setStyleSheet(
+                ""
+            );
+        } 
+    });
 
 
     QObject::connect(nextButton, &QPushButton::clicked, this, &MainWindow::handleNextSong);
@@ -75,27 +105,41 @@ MainWindow::MainWindow(QWidget *parent)
             }
         }
     });
-
+    
     QObject::connect(songProgress, &QSlider::sliderMoved, this, &MainWindow::updateSongProgress);
 
     //layout
     QHBoxLayout *layoutHorizontal = new QHBoxLayout(centralWidget);
 
-    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    QVBoxLayout *midlayout = new QVBoxLayout(centralWidget);
 
+    
+
+    QWidget *playListWidget = new QWidget;
+    QVBoxLayout *playlistLayout = new QVBoxLayout(playListWidget);
+    QScrollArea *scrollArea = new QScrollArea(centralWidget);
+    scrollArea->setWidget(playListWidget);
+    scrollArea->setWidgetResizable(true);
 
 
     layoutHorizontal->addWidget(loopButton);
     layoutHorizontal->addWidget(prevButton);
-    layoutHorizontal->addLayout(layout);
+    layoutHorizontal->addLayout(midlayout);
     layoutHorizontal->addWidget(nextButton);
     layoutHorizontal->addWidget(autoButton);
     layoutHorizontal->addWidget(volumeSlider);
+
+    layoutHorizontal->addWidget(scrollArea);
     
-    layout->addWidget(currSongTitle_);
-    layout->addWidget(playButton);
-    layout->addWidget(pauseButton);
-    layout->addWidget(songProgress);
+    midlayout->addWidget(currSongTitle_);
+    midlayout->addWidget(playButton);
+    //layout->addWidget(pauseButton);
+    midlayout->addWidget(songProgress);
+
+    for (auto song : *playlist_.getPlaylist()) {
+        QLabel *songOption = new QLabel(QString::fromStdString(song.name), playListWidget);
+        playlistLayout->addWidget(songOption);
+    }
 
     setCentralWidget(centralWidget);
 }

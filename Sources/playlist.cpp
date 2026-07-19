@@ -16,32 +16,47 @@ Playlist::Playlist(fs::path dir) : dir_(dir) {
     playListSize_ = playlist_.size();
 }
 
-Song Playlist::next() {
+const Song* Playlist::next() {
     playListPos_ = (1 + playListPos_) % (playListSize_);
     //player_->setSource(filePathList_.at(playListPos_));
     //player_->play();
-    return playlist_[playListPos_];
+    if (playlist_.empty()) {
+        return nullptr;
+    }
+    return &playlist_[playListPos_];
 }
 
-Song Playlist::prev() {
+const Song* Playlist::prev() {
     if (playListPos_ == 0) {
         playListPos_ = playListSize_ - 1;
     } else {
         --playListPos_;
     }
-    return playlist_[playListPos_];
+    if (playlist_.empty()) {
+        return nullptr;
+    }
+    return &playlist_[playListPos_];
 }
 
-Song Playlist::getSong() const{
-    return playlist_[playListPos_];
+const Song* Playlist::getSong() const{
+    if (playlist_.empty()) {
+        return nullptr;
+    }
+    return &playlist_[playListPos_];
 }
 
-void Playlist::flipAutoNext() {
-    autoNext = !autoNext;
+
+
+void Playlist::autoNext() {
+    autoNextFlag = !autoNextFlag;
 }
 
-bool Playlist::isAutoNext() {
-    return autoNext;
+bool Playlist::isAutoNext() const {
+    return autoNextFlag;
+}
+
+const std::vector<Song>* Playlist::getPlaylist() const {
+    return &playlist_;
 }
 
 

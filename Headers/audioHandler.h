@@ -18,14 +18,16 @@ class AudioHandler : public QObject {
     Q_OBJECT
     public: 
         explicit AudioHandler(QObject *parent = nullptr);
-        void setSource(Song);
+        void setSource(std::string);
         QMediaPlayer* getPlayer();
         bool isLooping();
+        bool isPlaying();
     
     private:
         QMediaPlayer *player_;
         QAudioOutput *audioOutput_;
-        bool looping = false;
+        bool looping_ = false;
+        bool playing_ = false;
     signals:
         void close();
     public slots:

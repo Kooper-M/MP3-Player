@@ -15,10 +15,12 @@ AudioHandler::AudioHandler(QObject *parent) : QObject(parent) {
 
 void AudioHandler::play() {
     player_->play();
+    playing_ = true;
 }
 
 void AudioHandler::pause() {
     player_->pause();
+    playing_ = false;
 }
 
 int AudioHandler::getDur() {
@@ -27,11 +29,15 @@ int AudioHandler::getDur() {
 
 void AudioHandler::loop() {
     player_->Infinite;
-    looping = !looping;
+    looping_ = !looping_;
 }
 
 bool AudioHandler::isLooping() {
-    return looping; 
+    return looping_; 
+}
+
+bool AudioHandler::isPlaying() {
+    return playing_;
 }
 
 QMediaPlayer* AudioHandler::getPlayer() {
@@ -42,7 +48,7 @@ void AudioHandler::setVolume(int volume) {
     audioOutput_->setVolume(volume/100.0);
 }
 
-void AudioHandler::setSource(Song song) {
-    player_->setSource(QUrl::fromLocalFile(QString::fromStdString(song.file_path_as_string)));
+void AudioHandler::setSource(std::string file_path) {
+    player_->setSource(QUrl::fromLocalFile(QString::fromStdString(file_path)));
 }
 

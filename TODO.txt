@@ -1,7 +1,5 @@
--signal if we are looping or  autoplaying
--need to add playlist feature
+-need to add playlist feature 
 -need to add file viewer and ability to click on the song you want to play in the playlist
 -display the picture associated with current song
--make play and pause button one button;
 -shuffle button 
 -need to make UI pretty 
